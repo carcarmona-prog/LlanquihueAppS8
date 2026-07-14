@@ -1,0 +1,52 @@
+package model;
+
+import service.InfoMostrable;
+import service.Registrable;
+
+public class ActivosVehiculos  implements Registrable, InfoMostrable {
+
+    private final String marca;
+    private final String modelo;
+    private final String color;
+    private final String patente;
+
+
+
+    public ActivosVehiculos(String marca, String modelo, String color, String patente) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.color = color;
+        this.patente = patente;
+
+
+
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getPatente() {
+        return patente;
+    }
+
+
+    @Override
+    public String registrar() {
+        return "";
+    }
+
+    @Override
+    public String mostrarInformacion() {
+        return "\uD83D\uDE97 auto móvil disponible: " + getMarca() + " " + getModelo() + " " + getColor() + " patente: " + getPatente();
+    }
+
+}
