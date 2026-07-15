@@ -17,13 +17,11 @@ public  class GuiasTuristicos extends Personal implements Registrable, InfoMostr
     }
 
 
-
+    @Override
     public String mostrarInformacion() {
-        return " \uD83C\uDFDE\uFE0F nombre: " + getNombreCompleto() + "| rut: " + getRut() + "| correo electrónico: " + getRut() + "| especialidad: " + especialidad;
+        return (" \uD83C\uDFDE\uFE0F nombre: " + getNombreCompleto() + "| rut: " + getRut() + "| correo electrónico: " + getRut() + "| especialidad: " + especialidad);
+
     }
-
-
-
 
 
 }

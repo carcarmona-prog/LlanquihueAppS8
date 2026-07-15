@@ -1,10 +1,10 @@
 package ui;
 import data.GestorElementos;
-import model.*;
 import service.Registrable;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.awt.event.ActionEvent;
 
 /**
  * Clase donde se crean los parámetros para la interfaz gráfica.
@@ -14,6 +14,7 @@ import java.util.List;
         private GestorElementos gestor;
         private DefaultListModel<String> modeloLista;
         private JList<String> listaServicios;
+        private JTextArea areaTexto;
 
         private JTextField campoNombre = new JTextField(15);
         private JTextField campoDuracion = new JTextField(5);
@@ -28,6 +29,8 @@ import java.util.List;
         private JTextField campoEmail = new JTextField(15);
         private JTextField campoPuesto = new JTextField(15);
         private JTextField campoArea = new JTextField(15);
+        private JTextField campoParadas = new JTextField(15);
+        private JTextField campoServicio = new JTextField(15);
 
         public Frame() {
             gestor = new GestorElementos();
@@ -41,16 +44,24 @@ import java.util.List;
             // Modelo de lista
             modeloLista = new DefaultListModel<>();
             listaServicios = new JList<>(modeloLista);
-            add(new JScrollPane(listaServicios), BorderLayout.CENTER);
+
+
+
 
             // Cargar datos iniciales
-            actualizarLista();
+            for (Registrable r : gestor.obtenerLista()) {
+                modeloLista.addElement(r.mostrarInformacion());
 
-            // Panel superior con botón de refresco
+
+            }
+
+
+            // Panel superior con botón de ver servicios
             JPanel panelSuperior = new JPanel(new FlowLayout());
             JButton botonVerlista = new JButton("Ver lista de servicios");
             botonVerlista.addActionListener(e -> actualizarLista());
             panelSuperior.add(botonVerlista);
+
 
 
             // Panel donde describimos los tipos de servicios
@@ -63,23 +74,9 @@ import java.util.List;
             });
             panelSuperior.add(botonDescribirTipo);
 
+            //creamos el boton para eliminar datos
             JButton botonEliminar = new JButton("Eliminar por Nombre");
-            botonEliminar.addActionListener(e -> {
-                String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre a eliminar:");
-                if (nombre != null && !nombre.isEmpty()) {
-                    boolean eliminado = gestor.eliminarPorNombre(nombre);
-                    if (eliminado) {
-                        JOptionPane.showMessageDialog(this, "Eliminado correctamente.");
-                    } else {
-                        JOptionPane.showMessageDialog(this, "No se encontró el servicio.");
-                    }
-                    // refrescar la lista
-                    modeloLista.clear();
-                    for (Registrable r : gestor.obtenerLista()) {
-                        modeloLista.addElement(r.mostrarInformacion());
-                    }
-                }
-            });
+            botonEliminar.addActionListener(this::eliminarPorNombre);
             panelSuperior.add(botonEliminar);
 
 
@@ -100,27 +97,45 @@ import java.util.List;
 
             comboTipos.addActionListener(e -> {
                 panelCampos.removeAll();
-                panelCampos.add(new JLabel("Nombre:"));
-                panelCampos.add(campoNombre);
-                panelCampos.add(new JLabel("Duración:"));
-                panelCampos.add(campoDuracion);
+
 
                 String tipo = (String) comboTipos.getSelectedItem();
                 switch (tipo) {
+
+                    case "Servicio Turistico" ->{
+                        panelCampos.add(new JLabel("Nombre del destino:"));
+                        panelCampos.add(campoNombre);
+                        panelCampos.add(new JLabel("Duración:"));
+                        panelCampos.add(campoDuracion);
+                    }
+
                     case "ExcursionCultural" -> {
-                        panelCampos.add(new JLabel("Lugar:"));
+                        panelCampos.add(new JLabel("Nombre del lugar historico:"));
                         panelCampos.add(campoLugar);
+                        panelCampos.add(new JLabel("Nombre de la actividad:"));
+                        panelCampos.add(campoNombre);
+                        panelCampos.add(new JLabel("Duracion:"));
+                        panelCampos.add(campoDuracion);
                     }
                     case "Ruta Gastronómica" -> {
                         panelCampos.add(new JLabel("Restaurante:"));
                         panelCampos.add(campoLugar);
+                        panelCampos.add(new JLabel("Numero de paradas"));
+                        panelCampos.add(campoParadas);
+                        panelCampos.add(new JLabel("Duración de la actividad"));
+                        panelCampos.add(campoDuracion);
                     }
                     case "Paseos lacustres" -> {
-                        panelCampos.add(new JLabel("Embarcación:"));
+                        panelCampos.add(new JLabel("Nombre de la actividad:"));
                         panelCampos.add(campoEmbarcacion);
+                        panelCampos.add(new JLabel("Duración de la actividad:"));
+                        panelCampos.add(campoColor);
+                        panelCampos.add(new JLabel("Tipo de embarcación:"));
                     }
                     case "Activos Vehículos" -> {
 
+                        panelCampos.add(new JLabel("Marca:"));
+                        panelCampos.add(campoMarca);
                         panelCampos.add(new JLabel("Modelo:"));
                         panelCampos.add(campoModelo);
                         panelCampos.add(new JLabel("Color:"));
@@ -129,6 +144,8 @@ import java.util.List;
                         panelCampos.add(campoPatente);
                     }
                     case "Colaboradores Externos", "Personal" -> {
+                        panelCampos.add(new JLabel("Nombre:"));
+                        panelCampos.add(campoNombre);
                         panelCampos.add(new JLabel("RUT:"));
                         panelCampos.add(campoRut);
                         panelCampos.add(new JLabel("Email:"));
@@ -136,14 +153,16 @@ import java.util.List;
                         panelCampos.add(new JLabel("Puesto:"));
                         panelCampos.add(campoPuesto);
                     }
-                    case "Guias turisticos" -> {
+                    case "Guias turísticos" -> {
+                        panelCampos.add(new JLabel("Nombre:"));
+                        panelCampos.add(campoNombre);
                         panelCampos.add(new JLabel("RUT:"));
                         panelCampos.add(campoRut);
                         panelCampos.add(new JLabel("Email:"));
                         panelCampos.add(campoEmail);
                         panelCampos.add(new JLabel("Puesto:"));
                         panelCampos.add(campoPuesto);
-                        panelCampos.add(new JLabel("Área:"));
+                        panelCampos.add(new JLabel("Servicio:"));
                         panelCampos.add(campoArea);
                     }
                 }
@@ -171,7 +190,8 @@ import java.util.List;
                         campoRut.getText(),
                         campoEmail.getText(),
                         campoPuesto.getText(),
-                        campoArea.getText()
+                        campoArea.getText(),
+                        campoServicio.getText()
                 );
 
                 actualizarLista();
@@ -185,19 +205,6 @@ import java.util.List;
             add(panelInferior, BorderLayout.SOUTH);
 
 
-            // Campo de filtro
-            JTextField campoFiltro = new JTextField(15);
-            JButton botonFiltrar = new JButton("Filtrar");
-            botonFiltrar.addActionListener(e -> {
-                String filtro = campoFiltro.getText().toLowerCase();
-                List<Registrable> filtrados = gestor.obtenerLista().stream()
-                        .filter(r -> r.mostrarInformacion().toLowerCase().contains(filtro))
-                        .toList();
-                actualizarLista();
-            });
-            panelSuperior.add(new JLabel("Filtro:"));
-            panelSuperior.add(campoFiltro);
-            panelSuperior.add(botonFiltrar);
 
 
             // Agregar componentes
@@ -206,15 +213,16 @@ import java.util.List;
             add(panelSuperior, BorderLayout.NORTH);
 
 
+
         }
 
 
         private void actualizarLista() {
             modeloLista.clear();
-            for (Registrable r : gestor.obtenerLista()) {
+            for(Registrable r : gestor.obtenerLista()){
                 modeloLista.addElement(r.mostrarInformacion());
             }
-            return ;
+
         }
 
         private void limpiarCampos() {
@@ -228,9 +236,38 @@ import java.util.List;
             campoEmail.setText("");
             campoPuesto.setText("");
             campoArea.setText("");
+            campoEmbarcacion.setText("");
+            campoMarca.setText("");
+            campoParadas.setText("");
+            campoServicio.setText("");
+
+
         }
 
-
+    private void cargarDatosIniciales() {
+        modeloLista.clear();
+        StringBuilder sb = new StringBuilder();
+        for (Registrable r : gestor.obtenerLista()) {
+            modeloLista.addElement(r.mostrarInformacion());
+            sb.append(r.mostrarInformacion()).append("\n");
+        }
+        areaTexto.setText(sb.toString());
     }
+
+
+    public void eliminarPorNombre(ActionEvent e) {
+        String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre a eliminar:");
+        if (nombre != null && !nombre.isEmpty()) {
+            boolean eliminado = gestor.eliminarPorNombre(nombre);
+            if (eliminado) {
+                JOptionPane.showMessageDialog(this, "Eliminado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el servicio.");
+            }
+            // refrescar la lista
+            modeloLista.clear();
+        }
+    }
+}
 
 

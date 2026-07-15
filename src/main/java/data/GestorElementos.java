@@ -37,6 +37,7 @@ public class GestorElementos {
 
     public String describirTipo(int indice){
         Registrable funcion = obtenerPorIndice(indice);
+
         if(funcion instanceof ServicioTuristico){
             return ((ServicioTuristico) funcion).getNombre()+ " -> es una servicio turístico";
         }
@@ -63,30 +64,29 @@ public class GestorElementos {
 
     public boolean eliminarPorNombre(String nombre) {
         return lista.obtenerLista().removeIf(r -> {
-            if (r instanceof ServicioTuristico) {
-                return ((ServicioTuristico) r).getNombre().equalsIgnoreCase(nombre);
+            if (r instanceof ServicioTuristico s) {
+                return s.getNombre().equalsIgnoreCase(nombre);
             }
-            if (r instanceof ExcursionCultural) {
-                return ((ExcursionCultural) r).getNombre().equalsIgnoreCase(nombre);
+            if (r instanceof ExcursionCultural e) {
+                return e.getNombre().equalsIgnoreCase(nombre);
             }
-            if (r instanceof RutaGastronomica) {
-                return ((RutaGastronomica) r).getNombre().equalsIgnoreCase(nombre);
+            if (r instanceof RutaGastronomica rg) {
+                return rg.getNombre().equalsIgnoreCase(nombre);
             }
-            if (r instanceof ColaboradoresExternos) {
-                return ((ColaboradoresExternos) r).getNombreCompleto().equalsIgnoreCase(nombre);
+            if (r instanceof ColaboradoresExternos c) {
+                return c.getNombreCompleto().equalsIgnoreCase(nombre);
             }
-            if (r instanceof ActivosVehiculos) {
-                // aquí puedes decidir si eliminar por modelo, patente, etc.
-                return ((ActivosVehiculos) r).getModelo().equalsIgnoreCase(nombre);
+            if (r instanceof ActivosVehiculos v) {
+                return v.getModelo().equalsIgnoreCase(nombre);
             }
-            if (r instanceof GuiasTuristicos) {
-                return ((GuiasTuristicos) r).getNombreCompleto().equalsIgnoreCase(nombre);
+            if (r instanceof GuiasTuristicos g) {
+                return g.getNombreCompleto().equalsIgnoreCase(nombre);
             }
-            if (r instanceof PaseoLacustre) {
-                return ((PaseoLacustre) r).getNombre().equalsIgnoreCase(nombre);
+            if (r instanceof PaseoLacustre p) {
+                return p.getNombre().equalsIgnoreCase(nombre);
             }
-            if (r instanceof Personal) {
-                return ((Personal) r).getNombreCompleto().equalsIgnoreCase(nombre);
+            if (r instanceof Personal per) {
+                return per.getNombreCompleto().equalsIgnoreCase(nombre);
             }
             return false;
         });
@@ -95,7 +95,7 @@ public class GestorElementos {
     public void registrar(String tipo, String nombre, int duracion,
                           String lugar, String modelo, String color,
                           String patente, String rut, String email,
-                          String puesto, String area, String text, String campoAreaText) {
+                          String puesto, String area, String servicio, String text, String campoServicioText) {
         switch (tipo) {
             case "Servicio Turístico" ->
                     lista.agregar(new ServicioTuristico(nombre, duracion));
@@ -108,11 +108,17 @@ public class GestorElementos {
             case "Activos Vehículos" ->
                     lista.agregar(new ActivosVehiculos(nombre, modelo, color, patente));
             case "Colaboradores Externos" ->
-                    lista.agregar(new ColaboradoresExternos(nombre, rut, email, puesto, "externo"));
+                    lista.agregar(new ColaboradoresExternos(nombre, rut, email, puesto, servicio ));
             case "Guias turisticos" ->
                     lista.agregar(new GuiasTuristicos(nombre, rut, email, puesto, area));
             case "Personal" ->
                     lista.agregar(new Personal(nombre, rut, email, puesto));
+        }
+    }
+
+    public void mostrarTodo() {
+        for (Registrable r : lista.obtenerLista()) {
+            System.out.println((lista.obtenerLista().indexOf(r)));
         }
     }
 
@@ -124,17 +130,9 @@ public class GestorElementos {
         return lista.obtenerLista().get(indice);
     }
 
-    public void registrar(ServicioTuristico servicio) {
-        lista.agregar(servicio);
-    }
 
 
-   
 
-    public void registrar(ActivosVehiculos activosVehiculos) {
-        
-    }
 
-    public void registrar(Personal personal) {
-    }
+
 }

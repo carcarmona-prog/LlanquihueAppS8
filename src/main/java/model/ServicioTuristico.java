@@ -24,14 +24,15 @@ public  class ServicioTuristico implements InfoMostrable, Registrable {
     }
 
 
-    @Override
-    public String registrar() {
-        return "";
+   public void registrar() {
+       System.out.println("Registrando servicio turístico");
     }
 
     @Override
     public String mostrarInformacion() {
-        return "\uD83D\uDCCC Servicio Turístico --> " + " | nombre de la actividad: " + nombre +  " | duración de la actividad: " + duracionHoras + "  horas." ;
+        return ( "\uD83D\uDCCC Servicio Turístico --> " + " | nombre de la actividad: " + nombre +  " | duración de la actividad: " + duracionHoras + "  horas.") ;
+
+
     }
 
 

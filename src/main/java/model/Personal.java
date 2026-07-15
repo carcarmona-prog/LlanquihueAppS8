@@ -3,7 +3,7 @@ package model;
 import service.InfoMostrable;
 import service.Registrable;
 
-public  class Personal implements Registrable, InfoMostrable {
+public class Personal implements Registrable, InfoMostrable {
 
     private final String nombreCompleto;
     private final String rut;
@@ -29,17 +29,17 @@ public  class Personal implements Registrable, InfoMostrable {
         return email;
     }
 
-    public void registrar(Personal personal) {
-    }
-
 
     @Override
-    public String registrar() {
-        return "";
+    public void registrar() {
+        System.out.println("Registrando personal");;
     }
 
+    @Override
     public String mostrarInformacion() {
-        return "\uD83D\uDC69\uD83C\uDFFC\u200D\uD83D\uDCBC nombre completo: " + nombreCompleto + " | rut: " + rut + " | correo electronico: " + email + " | puesto de trabajo " + puesto;
+        return ( "\uD83D\uDC69\uD83C\uDFFC\u200D\uD83D\uDCBC nombre completo: " + nombreCompleto + " | rut: " + rut + " | correo electronico: " + email + " | puesto de trabajo " + puesto);
+
+
     }
 
 }

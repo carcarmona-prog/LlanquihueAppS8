@@ -18,10 +18,16 @@ public class RutaGastronomica extends ServicioTuristico implements InfoMostrable
 
     }
 
-
+    @Override
+    public void registrar() {
+        System.out.println("registrando ruta gastronómica");;
+    }
 
     @Override
     public String mostrarInformacion() {
-        return "\uD83C\uDF74 Ruta Gastronómica --> " + " nombre de la actividad: " + nombre + " | Numero De Paradas: " + numeroDeParadas +  " | duración de la actividad: " + duracionHoras + "  horas.";
+        return ("\uD83C\uDF74 Ruta Gastronómica --> " + " nombre de la actividad: " + nombre + " | Numero De Paradas: " + numeroDeParadas +  " | duración de la actividad: " + duracionHoras + "  horas.");
+
+
     }
+
 }

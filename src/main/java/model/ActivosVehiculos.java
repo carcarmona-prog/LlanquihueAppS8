@@ -40,13 +40,15 @@ public class ActivosVehiculos  implements Registrable, InfoMostrable {
 
 
     @Override
-    public String registrar() {
-        return "";
+    public void registrar() {
+        System.out.println("registrando vehiculo");
     }
 
     @Override
     public String mostrarInformacion() {
-        return "\uD83D\uDE97 auto móvil disponible: " + getMarca() + " " + getModelo() + " " + getColor() + " patente: " + getPatente();
+        return ("\uD83D\uDE97 auto móvil disponible: " + " marca: "  + getMarca() + " | modelo; " + getModelo() + " | color: " + getColor() + " | patente: " + getPatente());
+
+
     }
 
 }

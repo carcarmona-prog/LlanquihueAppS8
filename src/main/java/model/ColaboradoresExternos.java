@@ -1,9 +1,8 @@
 package model;
 
 import service.InfoMostrable;
-import service.Registrable;
 
-public class ColaboradoresExternos extends Personal implements Registrable, InfoMostrable {
+public class ColaboradoresExternos extends Personal implements InfoMostrable {
 
     private final String servicio;
 
@@ -20,10 +19,14 @@ public class ColaboradoresExternos extends Personal implements Registrable, Info
 
     @Override
     public String mostrarInformacion() {
-        return "\uD83D\uDC77\uD83C\uDFFC Nombre del Colaborador Externo: " + getNombreCompleto() + " | rut: " + getRut() + " | email: " + getEmail() +  " | servicio: " + getServicio() ;
+        return ( "\uD83D\uDC77\uD83C\uDFFC Nombre del Colaborador Externo: " + getNombreCompleto() + " | rut: " + getRut() + " | email: " + getEmail() + " | puesto: " + getPuesto() +  " | servicio: " + getServicio());
+
+
     }
 
-
+    private String getPuesto() {
+        return "";
+    }
 
 
 }

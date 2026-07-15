@@ -25,12 +25,16 @@ public class PaseoLacustre extends ServicioTuristico implements InfoMostrable, R
         this.tipoDeEmbarcacion = tipoDeEmbarcacion;
     }
 
+    @Override
+    public void registrar() {
+        System.out.println("nuevo paseo registrado");
+    }
 
-
-
-
+    @Override
     public String mostrarInformacion() {
-     return "\uD83C\uDF0A Paseo Lacustre --> " + " Tipo De Embarcación: " + tipoDeEmbarcacion +  " | " + " nombre de la actividad: " + nombre + " | duración de la actividad: " +  duracionHoras + "  horas.";
+        return ( "\uD83C\uDF0A Paseo Lacustre --> " + " Tipo De Embarcación: " + tipoDeEmbarcacion +  " | " + " nombre de la actividad: " + nombre + " | duración de la actividad: " +  duracionHoras + "  horas.");
+
+
     }
 
 
