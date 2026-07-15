@@ -8,7 +8,7 @@ Analista Programador Computacional.
 
 Sede: Duoc uc sede online
 
-📘 Descripción general del sistema LlanquihueTourAppS8: Esta semana mejoramos el programa con el sentido de fortalecer y darle una estructura más profesional y robusta, donde las ejecuciones se gestionan por un solo método general para centralizar funciones, demostramos dos formas de ingresar y leer datos para almacenarlos en una lista dinámica para sus distintos usos con métodos sobreescritos y agregación o elimination datos.
+📘 Descripción general del sistema LlanquihueTourAppS8: Esta semana mejoramos el programa con el sentido de fortalecer y darle una estructura más profesional y robusta, donde utilizamos instanceof para usar metodos especificos, tambien este sistema modular de gestión turística, que combina herencia, polimorfismo, interfaces y GUI para administrar servicios, colaboradores y recursos de manera clara y extensible.
 
 1- Encapsulamiento de clases.
 
@@ -16,10 +16,37 @@ Sede: Duoc uc sede online
 
 3- Poliformismo.
 
-4- intarfaz de usuario
+4- Intarfaz de usuario.
 
-5- interfaces
+5- Interfaces.
 
+6- Instanceof
+
+📁 src/
+├── ui/                     # Interfaz gráfica y punto de entrada
+│   ├── Frame.java          # Ventana principal con Swing
+│   └── Main.java           # Clase principal con método main
+
+├── model/                  # Clases de dominio
+│   ├── ServicioTuristico.java
+│   ├── ExcursionCultural.java
+│   ├── PaseoLacustre.java
+│   ├── RutaGastronomica.java
+│   ├── ActivosVehiculos.java
+│   ├── ColaboradoresExternos.java
+│   ├── Personal.java
+│   └── GuiasTuristicos.java
+
+├── data/                   # Gestión de datos
+│   ├── Gestor.java         # Clase genérica para manejar listas
+│   └── GestorElementos.java# Gestor especializado con instanceof
+
+├── service/                # Interfaces y contratos
+│   ├── Registrable.java    # Interfaz común para entidades
+│   └── InfoMostrable.java  # Interfaz para mostrar información
+
+├── util/                   # Utilidades
+│   └── Separador.java      # Clase auxiliar para separar/formatos
 
 
 
