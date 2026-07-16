@@ -51,7 +51,7 @@ public class GestorElementos {
             return ((ColaboradoresExternos)funcion).getNombreCompleto()+ " -> es un colaborador de externo";
         }
         if(funcion instanceof ActivosVehiculos){
-            return ((ActivosVehiculos)funcion).getClass()+ " -> un vehiculo";
+            return ((ActivosVehiculos)funcion).getModelo()+ " -> un vehiculo";
         }
         if(funcion instanceof GuiasTuristicos){
             return ((GuiasTuristicos)funcion).getNombreCompleto()+ " -> es un guia turistico";
@@ -92,28 +92,33 @@ public class GestorElementos {
         });
     }
 
-    public void registrar(String tipo, String nombre, int duracion,
-                          String lugar, String modelo, String color,
+
+    public String mostrarInformacion(String tipo, String nombre, int duracion,
+                          String lugar, String marca, String modelo, String color,
                           String patente, String rut, String email,
-                          String puesto, String area, String servicio, String text, String campoServicioText) {
+                          String puesto, String area, String servicio, String text, int numeroParadas, String tipoEmbarcacion)
+    {
+
+
         switch (tipo) {
             case "Servicio Turístico" ->
                     lista.agregar(new ServicioTuristico(nombre, duracion));
-            case "ExcursionCultural" ->
+            case "Excursion Cultural" ->
                     lista.agregar(new ExcursionCultural(nombre, duracion, lugar));
             case "Ruta Gastronómica" ->
-                    lista.agregar(new RutaGastronomica(nombre, duracion, 5));
+                    lista.agregar(new RutaGastronomica(nombre, duracion, numeroParadas));
             case "Paseos lacustres" ->
-                    lista.agregar(new PaseoLacustre(nombre, duracion, lugar));
+                    lista.agregar(new PaseoLacustre(nombre, duracion, tipoEmbarcacion));
             case "Activos Vehículos" ->
-                    lista.agregar(new ActivosVehiculos(nombre, modelo, color, patente));
+                    lista.agregar(new ActivosVehiculos(marca, modelo, color, patente));
             case "Colaboradores Externos" ->
                     lista.agregar(new ColaboradoresExternos(nombre, rut, email, puesto, servicio ));
-            case "Guias turisticos" ->
+            case "Guias turísticos" ->
                     lista.agregar(new GuiasTuristicos(nombre, rut, email, puesto, area));
             case "Personal" ->
                     lista.agregar(new Personal(nombre, rut, email, puesto));
         }
+        return "error al agregar";
     }
 
     public void mostrarTodo() {

@@ -12,14 +12,11 @@ public  class GuiasTuristicos extends Personal implements Registrable, InfoMostr
         this.especialidad = especialidad;
     }
 
-    public String getEspecialidad() {
-        return especialidad;
-    }
 
 
     @Override
     public String mostrarInformacion() {
-        return (" \uD83C\uDFDE\uFE0F nombre: " + getNombreCompleto() + "| rut: " + getRut() + "| correo electrónico: " + getRut() + "| especialidad: " + especialidad);
+        return (" \uD83C\uDFDE\uFE0F Nombre del guia turístico: " + getNombreCompleto() + "| rut: " + getRut() + "| correo electrónico: " + getEmail() + " | puesto: " + getPuesto() + "| especialidad: " + especialidad);
 
     }
 

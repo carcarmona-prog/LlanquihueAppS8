@@ -14,10 +14,10 @@ import java.awt.event.ActionEvent;
         private GestorElementos gestor;
         private DefaultListModel<String> modeloLista;
         private JList<String> listaServicios;
-        private JTextArea areaTexto;
+
 
         private JTextField campoNombre = new JTextField(15);
-        private JTextField campoDuracion = new JTextField(5);
+        private JTextField campoDuracion = new JTextField(15);
 
         private JTextField campoLugar = new JTextField(15);
         private JTextField campoMarca = new JTextField(15);
@@ -82,9 +82,9 @@ import java.awt.event.ActionEvent;
 
             // Panel inferior para agregar servicios
             String[] tipos = {
-                    "Servicio Turístico", "ExcursionCultural", "Ruta Gastronómica",
+                    "Servicio Turístico", "Excursion Cultural", "Ruta Gastronómica",
                     "Paseos lacustres", "Activos Vehículos", "Colaboradores Externos",
-                    "Guias turisticos", "Personal"
+                    "Guias turísticos", "Personal"
             };
             JComboBox<String> comboTipos = new JComboBox<>(tipos);
 
@@ -102,14 +102,14 @@ import java.awt.event.ActionEvent;
                 String tipo = (String) comboTipos.getSelectedItem();
                 switch (tipo) {
 
-                    case "Servicio Turistico" ->{
+                    case "Servicio Turístico" ->{
                         panelCampos.add(new JLabel("Nombre del destino:"));
                         panelCampos.add(campoNombre);
                         panelCampos.add(new JLabel("Duración:"));
                         panelCampos.add(campoDuracion);
                     }
 
-                    case "ExcursionCultural" -> {
+                    case "Excursion Cultural" -> {
                         panelCampos.add(new JLabel("Nombre del lugar historico:"));
                         panelCampos.add(campoLugar);
                         panelCampos.add(new JLabel("Nombre de la actividad:"));
@@ -119,7 +119,7 @@ import java.awt.event.ActionEvent;
                     }
                     case "Ruta Gastronómica" -> {
                         panelCampos.add(new JLabel("Restaurante:"));
-                        panelCampos.add(campoLugar);
+                        panelCampos.add(campoNombre);
                         panelCampos.add(new JLabel("Numero de paradas"));
                         panelCampos.add(campoParadas);
                         panelCampos.add(new JLabel("Duración de la actividad"));
@@ -127,10 +127,11 @@ import java.awt.event.ActionEvent;
                     }
                     case "Paseos lacustres" -> {
                         panelCampos.add(new JLabel("Nombre de la actividad:"));
-                        panelCampos.add(campoEmbarcacion);
+                        panelCampos.add(campoNombre);
                         panelCampos.add(new JLabel("Duración de la actividad:"));
-                        panelCampos.add(campoColor);
+                        panelCampos.add(campoDuracion);
                         panelCampos.add(new JLabel("Tipo de embarcación:"));
+                        panelCampos.add(campoEmbarcacion);
                     }
                     case "Activos Vehículos" -> {
 
@@ -143,7 +144,7 @@ import java.awt.event.ActionEvent;
                         panelCampos.add(new JLabel("Patente:"));
                         panelCampos.add(campoPatente);
                     }
-                    case "Colaboradores Externos", "Personal" -> {
+                    case "Colaboradores Externos" -> {
                         panelCampos.add(new JLabel("Nombre:"));
                         panelCampos.add(campoNombre);
                         panelCampos.add(new JLabel("RUT:"));
@@ -152,6 +153,8 @@ import java.awt.event.ActionEvent;
                         panelCampos.add(campoEmail);
                         panelCampos.add(new JLabel("Puesto:"));
                         panelCampos.add(campoPuesto);
+                        panelCampos.add(new JLabel("Servicio:"));
+                        panelCampos.add(campoServicio);
                     }
                     case "Guias turísticos" -> {
                         panelCampos.add(new JLabel("Nombre:"));
@@ -165,6 +168,17 @@ import java.awt.event.ActionEvent;
                         panelCampos.add(new JLabel("Servicio:"));
                         panelCampos.add(campoArea);
                     }
+                    case  "Personal" -> {
+                        panelCampos.add(new JLabel("Nombre:"));
+                        panelCampos.add(campoNombre);
+                        panelCampos.add(new JLabel("RUT:"));
+                        panelCampos.add(campoRut);
+                        panelCampos.add(new JLabel("Email:"));
+                        panelCampos.add(campoEmail);
+                        panelCampos.add(new JLabel("Puesto:"));
+                        panelCampos.add(campoPuesto);
+
+                    }
                 }
                 panelCampos.revalidate();
                 panelCampos.repaint();
@@ -173,29 +187,37 @@ import java.awt.event.ActionEvent;
             // Botón agregar
             JButton botonAgregar = new JButton("Agregar");
             botonAgregar.addActionListener(e -> {
-                String tipo = (String) comboTipos.getSelectedItem();
-                String nombre = campoNombre.getText();
-                int duracion = campoDuracion.getText().isEmpty() ? 0 : Integer.parseInt(campoDuracion.getText());
+               try {
+                   String tipo = (String) comboTipos.getSelectedItem();
+                   String nombre = campoNombre.getText();
+                   int duracion = campoDuracion.getText().isEmpty() ? 0 : Integer.parseInt(campoDuracion.getText());
+                   int numeroParadas = campoParadas.getText().isEmpty() ? 0 : Integer.parseInt(campoParadas.getText());
+                   String tipoEmbarcacion = campoEmbarcacion.getText();
 
-                gestor.registrar(
-                        tipo,
-                        nombre,
-                        duracion,
-                        campoLugar.getText(),
-                        campoMarca.getText(),
-                        campoEmbarcacion.getText(),
-                        campoModelo.getText(),
-                        campoColor.getText(),
-                        campoPatente.getText(),
-                        campoRut.getText(),
-                        campoEmail.getText(),
-                        campoPuesto.getText(),
-                        campoArea.getText(),
-                        campoServicio.getText()
-                );
+                   gestor.mostrarInformacion(
+                           tipo,
+                           nombre,
+                           duracion,
+                           campoLugar.getText(),
+                           campoMarca.getText(),
+                           campoModelo.getText(),
+                           campoColor.getText(),
+                           campoPatente.getText(),
+                           campoRut.getText(),
+                           campoEmail.getText(),
+                           campoPuesto.getText(),
+                           campoArea.getText(),
+                           campoServicio.getText(),
+                           campoPatente.getText(),
+                           numeroParadas,
+                           tipoEmbarcacion);
+                   actualizarLista();
+                   limpiarCampos();
 
-                actualizarLista();
-                limpiarCampos();
+               }catch(NumberFormatException ex){
+                   JOptionPane.showMessageDialog(null, ex.getMessage(), "Error de tipeo, ingrese el dato que se le pide", JOptionPane.ERROR_MESSAGE);
+               }
+
             });
             JPanel panelInferior = new JPanel(new BorderLayout());
             panelInferior.add(comboTipos, BorderLayout.NORTH);
@@ -208,7 +230,7 @@ import java.awt.event.ActionEvent;
 
 
             // Agregar componentes
-            add(panelSuperior, BorderLayout.NORTH);
+
             add(new JScrollPane(listaServicios), BorderLayout.CENTER);
             add(panelSuperior, BorderLayout.NORTH);
 
@@ -244,15 +266,6 @@ import java.awt.event.ActionEvent;
 
         }
 
-    private void cargarDatosIniciales() {
-        modeloLista.clear();
-        StringBuilder sb = new StringBuilder();
-        for (Registrable r : gestor.obtenerLista()) {
-            modeloLista.addElement(r.mostrarInformacion());
-            sb.append(r.mostrarInformacion()).append("\n");
-        }
-        areaTexto.setText(sb.toString());
-    }
 
 
     public void eliminarPorNombre(ActionEvent e) {
@@ -264,8 +277,8 @@ import java.awt.event.ActionEvent;
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontró el servicio.");
             }
-            // refrescar la lista
-            modeloLista.clear();
+            // actualizar lista
+            actualizarLista();
         }
     }
 }

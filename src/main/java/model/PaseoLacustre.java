@@ -32,7 +32,7 @@ public class PaseoLacustre extends ServicioTuristico implements InfoMostrable, R
 
     @Override
     public String mostrarInformacion() {
-        return ( "\uD83C\uDF0A Paseo Lacustre --> " + " Tipo De Embarcación: " + tipoDeEmbarcacion +  " | " + " nombre de la actividad: " + nombre + " | duración de la actividad: " +  duracionHoras + "  horas.");
+        return ( "\uD83C\uDF0A Paseo Lacustre --> " + " | " + " nombre de la actividad: " + nombre + " | duración de la actividad: " +  duracionHoras + "  horas." + "  tipo de embarcación: " + tipoDeEmbarcacion );
 
 
     }
