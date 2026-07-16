@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
  */
 
     public class Frame extends JFrame {
-        private GestorElementos gestor;
+    public GestorElementos gestor;
         private DefaultListModel<String> modeloLista;
         private JList<String> listaServicios;
 
