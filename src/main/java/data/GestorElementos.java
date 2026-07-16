@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class GestorElementos {
 
-    private final Gestor<Registrable>lista;
+   public final Gestor<Registrable>lista;
 
     public GestorElementos() {
         this.lista = new Gestor<>();
@@ -93,7 +93,7 @@ public class GestorElementos {
     }
 
 
-    public String mostrarInformacion(String tipo, String nombre, int duracion,
+    public void registrar(TipoServicio tipo, String nombre, int duracion,
                           String lugar, String marca, String modelo, String color,
                           String patente, String rut, String email,
                           String puesto, String area, String servicio, String text, int numeroParadas, String tipoEmbarcacion)
@@ -101,24 +101,24 @@ public class GestorElementos {
 
 
         switch (tipo) {
-            case "Servicio Turístico" ->
+            case SERVICIO_TURISTICO ->
                     lista.agregar(new ServicioTuristico(nombre, duracion));
-            case "Excursion Cultural" ->
+            case EXCURSION_CULTURAL ->
                     lista.agregar(new ExcursionCultural(nombre, duracion, lugar));
-            case "Ruta Gastronómica" ->
+            case RUTA_GASTRONOMICA->
                     lista.agregar(new RutaGastronomica(nombre, duracion, numeroParadas));
-            case "Paseos lacustres" ->
+            case PASEO_LACUSTRE ->
                     lista.agregar(new PaseoLacustre(nombre, duracion, tipoEmbarcacion));
-            case "Activos Vehículos" ->
+            case ACTIVOS_VEHICULOS ->
                     lista.agregar(new ActivosVehiculos(marca, modelo, color, patente));
-            case "Colaboradores Externos" ->
+            case COLABORADORES_EXTERNOS ->
                     lista.agregar(new ColaboradoresExternos(nombre, rut, email, puesto, servicio ));
-            case "Guias turísticos" ->
+            case GUIAS_TURISTICOS ->
                     lista.agregar(new GuiasTuristicos(nombre, rut, email, puesto, area));
-            case "Personal" ->
+            case PERSONAL ->
                     lista.agregar(new Personal(nombre, rut, email, puesto));
         }
-        return "error al agregar";
+
     }
 
     public void mostrarTodo() {
