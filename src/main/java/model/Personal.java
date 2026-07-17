@@ -1,9 +1,9 @@
 package model;
 
 import service.InfoMostrable;
-import service.Registrable;
+import service.Registrables;
 
-public class Personal implements Registrable, InfoMostrable {
+public class Personal implements Registrables, InfoMostrable {
 
     private String nombreCompleto;
     private  String rut;
@@ -36,6 +36,21 @@ public class Personal implements Registrable, InfoMostrable {
         return puesto;
     }
 
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public void setRut(String rut) {
+        this.rut = rut;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPuesto(String puesto) {
+        this.puesto = puesto;
+    }
 
     @Override
     public void registrar() {

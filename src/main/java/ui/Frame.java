@@ -1,11 +1,16 @@
 package ui;
+import data.DatosPorAgregar;
 import data.GestorElementos;
 import model.TipoServicio;
-import service.Registrable;
+import service.Registrables;
+import util.PersistenciaException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * Clase donde se crean los parámetros para la interfaz gráfica.
@@ -48,7 +53,7 @@ import java.awt.event.ActionEvent;
 
 
         // Cargar datos iniciales
-        for (Registrable r : gestor.obtenerLista()) {
+        for (Registrables r : gestor.obtenerLista()) {
             modeloLista.addElement(r.mostrarInformacion());
 
 
@@ -110,7 +115,7 @@ import java.awt.event.ActionEvent;
                     panelCampos.add(campoLugar);
                     panelCampos.add(new JLabel("Nombre de la actividad:"));
                     panelCampos.add(campoNombre);
-                    panelCampos.add(new JLabel("Duracion:"));
+                    panelCampos.add(new JLabel("Duración:"));
                     panelCampos.add(campoDuracion);
                 }
                 case RUTA_GASTRONOMICA -> {
@@ -181,61 +186,68 @@ import java.awt.event.ActionEvent;
         });
 
         // Botón agregar
-        JButton botonAgregar = new JButton("Agregar Servicios, Personal, Activos");
+        JButton botonAgregar;
+        botonAgregar = new JButton("Agregar Servicios, Personal, Activos");
         botonAgregar.addActionListener(e -> {
             try {
-                TipoServicio tipoServicio= (TipoServicio) comboTipos.getSelectedItem();
-                String nombre = campoNombre.getText();
-                int duracion = campoDuracion.getText().isEmpty() ? 0 : Integer.parseInt(campoDuracion.getText());
-                int numeroParadas = campoParadas.getText().isEmpty() ? 0 : Integer.parseInt(campoParadas.getText());
-                String tipoEmbarcacion = campoEmbarcacion.getText();
+                TipoServicio tipo= (TipoServicio) comboTipos.getSelectedItem();
 
-                assert tipoServicio != null;
-                gestor.registrar(
-                        tipoServicio,
-                        nombre,
-                        duracion,
-                        campoLugar.getText(),
-                        campoMarca.getText(),
-                        campoModelo.getText(),
-                        campoColor.getText(),
-                        campoPatente.getText(),
-                        campoRut.getText(),
-                        campoEmail.getText(),
-                        campoPuesto.getText(),
-                        campoArea.getText(),
-                        campoServicio.getText(),
-                        campoPatente.getText(),
-                        numeroParadas,
-                        tipoEmbarcacion);
+                int duracion = parsearEntero(campoDuracion.getText());
+                int numeroParadas = parsearEntero(campoParadas.getText());
+
+
+                DatosPorAgregar datos = new DatosPorAgregar()
+                        .setNombre(campoNombre.getText())
+                        .setDuracion(duracion)
+                        .setLugar(campoLugar.getText())
+                        .setMarca(campoMarca.getText())
+                        .setEmbarcacion(campoEmbarcacion.getText())
+                        .setModelo(campoModelo.getText())
+                        .setColor(campoColor.getText())
+                        .setPatente(campoPatente.getText())
+                        .setRut(campoRut.getText())
+                        .setEmail(campoEmail.getText())
+                        .setPuesto(campoPuesto.getText())
+                        .setArea(campoArea.getText())
+                        .setServicio(campoServicio.getText())
+                        .setNumeroParadas(numeroParadas);
+
+                gestor.registrar(tipo, datos);
+                gestor.guardar();
                 actualizarLista();
                 limpiarCampos();
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error de tipeo, ingrese el dato que se le pide", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "La duración y el número de paradas deben ser números enteros (ej. 3), sin letras ni símbolose", JOptionPane.ERROR_MESSAGE);
+            } catch (PersistenciaException | IOException ex) {
+               JOptionPane.showMessageDialog(this, ex.getMessage(),"no se pudo guardar", JOptionPane.ERROR_MESSAGE);
             }
 
         });
+
+
+
         JPanel panelInferior = new JPanel(new BorderLayout());
         panelInferior.add(comboTipos, BorderLayout.NORTH);
         panelInferior.add(panelCampos, BorderLayout.CENTER);
         panelInferior.add(botonAgregar, BorderLayout.SOUTH);
 
         add(panelInferior, BorderLayout.SOUTH);
-
-
-        // Agregar componentes
-
         add(new JScrollPane(listaServicios), BorderLayout.CENTER);
         add(panelSuperior, BorderLayout.NORTH);
 
 
     }
 
+    private int parsearEntero(String texto) {
+        String limpio = texto == null ? "" : texto.trim();
+        return limpio.isEmpty() ? 0 : Integer.parseInt(limpio);
+    }
+
 
     private void actualizarLista() {
         modeloLista.clear();
-        for (Registrable r : gestor.obtenerLista()) {
+        for (Registrables r : gestor.obtenerLista()) {
             modeloLista.addElement(r.mostrarInformacion());
         }
 

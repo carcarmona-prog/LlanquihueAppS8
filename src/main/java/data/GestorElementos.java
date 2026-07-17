@@ -1,13 +1,18 @@
 package data;
 
 import model.*;
-import service.Registrable;
+import service.Registrables;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GestorElementos {
 
-   public final Gestor<Registrable>lista;
+   public final Gestor<Registrables>lista;
+
 
     public GestorElementos() {
         this.lista = new Gestor<>();
@@ -31,12 +36,12 @@ public class GestorElementos {
 
     }
 
-    public ArrayList<Registrable> obtenerLista(){
+    public ArrayList<Registrables> obtenerLista(){
         return new ArrayList<>(lista.obtenerLista());
     }
 
     public String describirTipo(int indice){
-        Registrable funcion = obtenerPorIndice(indice);
+        Registrables funcion = obtenerPorIndice(indice);
 
         if(funcion instanceof ServicioTuristico){
             return ((ServicioTuristico) funcion).getNombre()+ " -> es una servicio turístico";
@@ -93,7 +98,7 @@ public class GestorElementos {
     }
 
 
-    public void registrar(TipoServicio tipo, String nombre, int duracion,
+    public void tipos(TipoServicio tipo, String nombre, int duracion,
                           String lugar, String marca, String modelo, String color,
                           String patente, String rut, String email,
                           String puesto, String area, String servicio, String text, int numeroParadas, String tipoEmbarcacion)
@@ -121,14 +126,119 @@ public class GestorElementos {
 
     }
 
+    private static final String ARCHIVO_DATOS = "datos_llanquihue.csv";
+    private static final String ENCABEZADO_CSV =
+            "tipo;nombre;duracion;lugar;marca;embarcacion;modelo;color;patente;rut;email;puesto;area;servicio;numeroParadas";
+
+    public void guardar() throws IOException {
+        try{
+            List<String> lineas = Files.readAllLines(Paths.get(ARCHIVO_DATOS));
+        lineas.add(ENCABEZADO_CSV);
+        for(Registrables r : lista.obtenerLista()){
+            TipoServicio tipo = determinarTipo(r);
+            if(tipo == null)continue;
+            DatosPorAgregar datos = extraeDatos(r);
+            lineas.add(PersistenciaCSV.unirCampos(
+                    tipo.name(), datos.getNombre(), String.valueOf(datos.getDuracion()),
+                    datos.getLugar(), datos.getMarca(), datos.getEmbarcacion(),
+                    datos.getModelo(), datos.getColor(), datos.getPatente(),
+                    datos.getRut(), datos.getEmail(), datos.getPuesto(),
+                    datos.getArea(), datos.getServicio(), String.valueOf(datos.getNumeroParadas())
+            ));
+        }
+        PersistenciaCSV.escribirLineas(ARCHIVO_DATOS, lineas);
+
+
+        }catch(Exception e){
+            System.out.println("Error al guardar lineas" +  e.getMessage());
+        }
+    }
+    public void cargar(){
+        cargar(ARCHIVO_DATOS);
+    }
+
+    public void cargar(String rutaArchivo) {
+        try {
+            for (String[] campos : PersistenciaCSV.leerFilas(rutaArchivo)) {
+                if (campos.length < 15) continue; // fila corrupta, se ignora
+                TipoServicio tipo = TipoServicio.valueOf(campos[0]);
+                DatosPorAgregar datos = new DatosPorAgregar()
+                        .setNombre(campos[1])
+                        .setDuracion(parseEntero(campos[2]))
+                        .setLugar(campos[3])
+                        .setMarca(campos[4])
+                        .setEmbarcacion(campos[5])
+                        .setModelo(campos[6])
+                        .setColor(campos[7])
+                        .setPatente(campos[8])
+                        .setRut(campos[9])
+                        .setEmail(campos[10])
+                        .setPuesto(campos[11])
+                        .setArea(campos[12])
+                        .setServicio(campos[13])
+                        .setNumeroParadas(parseEntero(campos[14]));
+                registrar(tipo, datos);
+            }
+        } catch (IOException e) {
+            System.err.println("No se pudo cargar el archivo de datos: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println("El archivo de datos tiene un tipo desconocido: " + e.getMessage());
+        }
+    }
+
+    private int parseEntero(String texto) {
+        try {
+            return Integer.parseInt(texto);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    private TipoServicio determinarTipo(Registrables r) {
+        if (r instanceof ActivosVehiculos) return TipoServicio.ACTIVOS_VEHICULOS;
+        if (r instanceof RutaGastronomica) return TipoServicio.RUTA_GASTRONOMICA;
+        if (r instanceof ExcursionCultural) return TipoServicio.EXCURSION_CULTURAL;
+        if (r instanceof PaseoLacustre) return TipoServicio.PASEO_LACUSTRE;
+        if (r instanceof ServicioTuristico) return TipoServicio.SERVICIO_TURISTICO;
+        if (r instanceof ColaboradoresExternos) return TipoServicio.COLABORADORES_EXTERNOS;
+        if (r instanceof GuiasTuristicos) return TipoServicio.GUIAS_TURISTICOS;
+        if (r instanceof Personal) return TipoServicio.PERSONAL;
+        return null;
+    }
+
+
+
+    private DatosPorAgregar extraeDatos(Registrables r) {
+        DatosPorAgregar datos = new DatosPorAgregar();
+        if (r instanceof ActivosVehiculos v) {
+            datos.setMarca(v.getMarca()).setModelo(v.getModelo()).setColor(v.getColor()).setPatente(v.getPatente());
+        } else if (r instanceof RutaGastronomica rg) {
+            datos.setNombre(rg.getNombre()).setDuracion(rg.getDuracionHoras()).setNumeroParadas(rg.getNumeroDeParadas());
+        } else if (r instanceof ExcursionCultural ex) {
+            datos.setNombre(ex.getNombre()).setDuracion(ex.getDuracionHoras()).setLugar(ex.getLugarHistorico());
+        } else if (r instanceof PaseoLacustre p) {
+            datos.setNombre(p.getNombre()).setDuracion(p.getDuracionHoras()).setEmbarcacion(p.getTipoDeEmbarcacion());
+        } else if (r instanceof ServicioTuristico s) {
+            datos.setNombre(s.getNombre()).setDuracion(s.getDuracionHoras());
+        } else if (r instanceof ColaboradoresExternos c) {
+            datos.setNombre(c.getNombreCompleto()).setRut(c.getRut()).setEmail(c.getEmail()).setPuesto(c.getPuesto()).setServicio(c.getServicio());
+        } else if (r instanceof GuiasTuristicos g) {
+            datos.setNombre(g.getNombreCompleto()).setRut(g.getRut()).setEmail(g.getEmail()).setPuesto(g.getPuesto()).setArea(g.getEspecialidad());
+        } else if (r instanceof Personal per) {
+            datos.setNombre(per.getNombreCompleto()).setRut(per.getRut()).setEmail(per.getEmail()).setPuesto(per.getPuesto());
+        }
+        return datos;
+    }
+
+
     public void mostrarTodo() {
-        for (Registrable r : lista.obtenerLista()) {
+        for (Registrables r : lista.obtenerLista()) {
             System.out.println((lista.obtenerLista().indexOf(r)));
         }
     }
 
 
-    public Registrable obtenerPorIndice(int indice) {
+    public Registrables obtenerPorIndice(int indice) {
         if (indice < 0 || indice >= lista.obtenerLista().size()) {
             throw new IllegalArgumentException("Indice fuera de rango: " + indice);
         }
@@ -136,8 +246,7 @@ public class GestorElementos {
     }
 
 
+    public void registrar(TipoServicio tipo, DatosPorAgregar datos) {
 
-
-
-
+    }
 }

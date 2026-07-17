@@ -1,13 +1,13 @@
 package model;
 
 import service.InfoMostrable;
-import service.Registrable;
+import service.Registrables;
 
 /**
  * Superclase que hereda atributos relacionales a las demás subclases.
  */
 
-public  class ServicioTuristico implements InfoMostrable, Registrable {
+public  class ServicioTuristico implements InfoMostrable, Registrables {
 
     protected String nombre;
     protected int duracionHoras;
@@ -16,15 +16,23 @@ public  class ServicioTuristico implements InfoMostrable, Registrable {
         this.nombre = nombre;
         this.duracionHoras = duracionHoras;
     }
+
     public String getNombre() {
         return nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    public int getDuracionHoras() {
+        return duracionHoras;
+    }
+    public void setDuracionHoras(int duracionHoras) {
+        this.duracionHoras = duracionHoras;
+    }
 
-   public void registrar() {
+    public void registrar() {
        System.out.println("Registrando servicio turístico");
     }
 

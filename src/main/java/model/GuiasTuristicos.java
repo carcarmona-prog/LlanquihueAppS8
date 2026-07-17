@@ -1,9 +1,9 @@
 package model;
 
 import service.InfoMostrable;
-import service.Registrable;
+import service.Registrables;
 
-public  class GuiasTuristicos extends Personal implements Registrable, InfoMostrable {
+public  class GuiasTuristicos extends Personal implements Registrables, InfoMostrable {
 
     private final String especialidad;
 
@@ -21,4 +21,8 @@ public  class GuiasTuristicos extends Personal implements Registrable, InfoMostr
     }
 
 
+    public String getEspecialidad() {
+
+        return null;
+    }
 }

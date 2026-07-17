@@ -1,14 +1,14 @@
 package model;
 
 import service.InfoMostrable;
-import service.Registrable;
+import service.Registrables;
 
 /**
  * Clase que hereda atributos de ServicioTuristico
  * agrega numeroDeParadas como atributo propio.
  */
 
-public class RutaGastronomica extends ServicioTuristico implements InfoMostrable, Registrable {
+public class RutaGastronomica extends ServicioTuristico implements InfoMostrable, Registrables {
 
     private final int numeroDeParadas;
 
@@ -16,6 +16,10 @@ public class RutaGastronomica extends ServicioTuristico implements InfoMostrable
         super(nombre,duracionHoras);
       this.numeroDeParadas= numeroDeParadas;
 
+    }
+
+    public int getNumeroDeParadas() {
+        return numeroDeParadas;
     }
 
     @Override

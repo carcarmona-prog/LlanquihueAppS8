@@ -1,9 +1,9 @@
 package model;
 
 import service.InfoMostrable;
-import service.Registrable;
+import service.Registrables;
 
-public class ActivosVehiculos  implements Registrable, InfoMostrable {
+public class ActivosVehiculos  implements Registrables, InfoMostrable {
 
     private final String marca;
     private final String modelo;

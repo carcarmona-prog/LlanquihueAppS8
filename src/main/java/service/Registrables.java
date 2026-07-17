@@ -1,6 +1,6 @@
 package service;
 
-public interface Registrable {
+public interface Registrables {
 
     void registrar();
 

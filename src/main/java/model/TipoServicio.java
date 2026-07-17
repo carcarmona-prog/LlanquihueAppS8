@@ -21,6 +21,7 @@ public enum TipoServicio {
         this.etiqueta = etiqueta;
     }
 
+
     public String getEtiqueta() {
         return etiqueta;
     }

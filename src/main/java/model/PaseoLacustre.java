@@ -1,14 +1,14 @@
 package model;
 
 import service.InfoMostrable;
-import service.Registrable;
+import service.Registrables;
 
 /**
  * Clase que hereda atributos de ServicioTuristico.
  * agrega tipoDeEmbarcacion como atributo propio.
  */
 
-public class PaseoLacustre extends ServicioTuristico implements InfoMostrable, Registrable {
+public class PaseoLacustre extends ServicioTuristico implements InfoMostrable, Registrables {
 
     private String tipoDeEmbarcacion;
 
